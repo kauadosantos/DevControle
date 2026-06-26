@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { Tickte } from "./components/tickte"
+import { Tickte } from "./components/tickte" 
 import prismaClient from "@/lib/prisma"
 import { ButtonRefresh } from "./components/button"
 
@@ -11,21 +11,24 @@ export default async function Dashboard() {
 
     const session = await getServerSession(authOptions)
 
-    if (session === null) {
+    // Se não tiver sessão ou se o usuário não tiver ID válido na sessão
+    if (!session || !session.user) {
         redirect("/")
     }
 
     const tickets = await prismaClient.ticket.findMany({
         where: {
-            status: "aberto" , 
-            custumer:{
-                userid: session.user.id
+            status: "aberto", 
+            custumer: {
+                // Certifique-se de que seu NextAuth injeta o 'id' em session.user no callback da session
+                userid: (session.user as any).id 
             }
         },
         include: {
             custumer: true
         }
     })
+
     console.log(tickets)
 
     return (
@@ -51,22 +54,16 @@ export default async function Dashboard() {
                     </thead>
 
                     <tbody>
-                        {tickets.map(ticket => (
-                            <Tickte key={ticket.id}
-                                customer={ticket.custumer}
-                                ticket={ticket} />
-                        ))}
-                       
-
-
+                {tickets.map((ticket: any) => (
+                    <Tickte 
+                    key={ticket.id}
+                    customer={ticket.custumer} 
+                    ticket={ticket} 
+                    />
+                ))}
                     </tbody>
-
-
                 </table>
-                 
-
             </main>
         </Container>
-
     )
 }
