@@ -71,9 +71,9 @@ export default async function Chamados() {
                             <label className="mb-1 font-medium text-lg">Selecione o cliente</label>
 
                             <select className="w-full border-2 rounded-md px-2 mb-2 h-11" name="customer">
-                                {customers.map((item) => (
-                                    <option value={item.id} key={item.id}>{item.name}</option>
-                                ))}
+                                {customers.map((item: { id: string; name: string }) => (
+                                <option value={item.id} key={item.id}>{item.name}</option>
+                            ))}
                             </select>
                         </>
                     )}
