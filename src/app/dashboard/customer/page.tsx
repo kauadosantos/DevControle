@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Card } from "./components/card"
 import  PrismaClient  from "@/lib/prisma"
+import { customerProps } from "@/utils/cutomers.type"
 export default async function Customer(){
     const session = await getServerSession(authOptions)
         
@@ -12,13 +13,13 @@ export default async function Customer(){
             redirect("/")
         }
         ////
-        const customers = await PrismaClient.custumer.findMany({
+        const clientes = await PrismaClient.custumer.findMany({
             where:{
                 userid: session.user.id
             }
         })
         console.log("==========")
-        console.log(customers)
+        console.log(clientes)
         console.log("==========")
         ////
     return(
@@ -33,8 +34,8 @@ export default async function Customer(){
                 </div>
                 <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 
-                    {customers.map(item => (
-                        <Card key={item.id} customer={item}/>
+                    {clientes.map((item: customerProps) => (
+                    <Card key={item.id} customer={item}/>
                     ))}
 
             
