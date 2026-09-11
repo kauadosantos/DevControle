@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../generated/prisma";
 
 let prisma: PrismaClient
 
@@ -11,7 +11,7 @@ if(process.env.NODE_ENV === "production"){
     }
 
     if(!globalWhitePrisma.prisma){
-        globalWhitePrisma.prisma = new PrismaClient(); 
+        globalWhitePrisma.prisma = new PrismaClient();
     }
 
     prisma = globalWhitePrisma.prisma
